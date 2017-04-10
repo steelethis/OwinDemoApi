@@ -35,7 +35,7 @@ namespace DemoAPI.Controllers
         public IHttpActionResult Get(int id)
         {
             Person person = personRepository.Get(id);
-            return Content(HttpStatusCode.OK, JsonConvert.SerializeObject(person));
+            return Content(HttpStatusCode.OK, person);
         }
     }
 }

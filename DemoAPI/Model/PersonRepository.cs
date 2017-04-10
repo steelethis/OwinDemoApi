@@ -7,8 +7,8 @@ namespace DemoAPI.Model
 {
     public class PersonRepository : IPersonRepository
     {
-        private Dictionary<int, Person> people = new Dictionary<int, Person>();
-        private int index;
+        private static Dictionary<int, Person> people = new Dictionary<int, Person>();
+        private static int index;
 
         public Person Add(Person item)
         {

@@ -1,8 +1,4 @@
 ﻿using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 
 namespace DemoAPI
@@ -12,6 +8,7 @@ namespace DemoAPI
         public void Configuration(IAppBuilder app)
         {
             var config = new HttpConfiguration();
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
 
             app.UseWebApi(config);

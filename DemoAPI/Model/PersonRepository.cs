@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace DemoAPI.Model
 {
@@ -10,9 +12,35 @@ namespace DemoAPI.Model
         private static Dictionary<int, Person> people = new Dictionary<int, Person>();
         private static int index;
 
+        private SQLiteConnection GetDbConnection()
+        {
+            return new SQLiteConnection(@"Data Source=E:\db\sqlite\peopleDB.db;Version=3;");
+        }
+
+        private void ExecuteSQLCommand(string sqlStatement)
+        {
+            SQLiteConnection dbConnection = GetDbConnection();
+            
+            using (dbConnection)
+            {
+                dbConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(sqlStatement, dbConnection);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+
+            }
+        }
+
         public Person Add(Person item)
         {
-            people.Add(index++, item);
+            string sql = $"insert into people(name, address, email) values ('{item.Name}', '{item.Address}', '{item.Email}')";
+            ExecuteSQLCommand(sql);
 
             return item;
         }

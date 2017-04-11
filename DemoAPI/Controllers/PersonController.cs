@@ -37,5 +37,13 @@ namespace DemoAPI.Controllers
             Person person = personRepository.Get(id);
             return Content(HttpStatusCode.OK, person);
         }
+
+        [Route("getall")]
+        [HttpGet]
+        public IHttpActionResult GetAll()
+        {
+            List<Person> people = (List<Person>)personRepository.GetAll();
+            return Content(HttpStatusCode.OK, people);
+        }
     }
 }

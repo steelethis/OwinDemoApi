@@ -14,7 +14,7 @@ namespace DemoAPI.Model
 
         private SQLiteConnection GetDbConnection()
         {
-            return new SQLiteConnection(@"Data Source=E:\db\sqlite\peopleDB.db;Version=3;");
+            return new SQLiteConnection(@"Data Source=S:\dev\db\sqlite\peopleDB.db;Version=3;");
         }
 
         private void ExecuteSQLCommand(string sqlStatement)
@@ -47,7 +47,23 @@ namespace DemoAPI.Model
 
         public Person Get(int id)
         {
-            return people[id];
+            Person retrievedPerson = new Person();
+            string sql = $"select * from people where id = {id}";
+
+            SQLiteConnection dbCon = GetDbConnection();
+            using (dbCon)
+            {
+                dbCon.Open();
+                SQLiteCommand command = new SQLiteCommand(sql, dbCon);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                retrievedPerson.Name = (string)reader["name"];
+                retrievedPerson.Address = (string)reader["address"];
+                retrievedPerson.Email = (string)reader["email"];
+            }
+                
+            return retrievedPerson;
         }
 
         public IEnumerable<Person> GetAll()

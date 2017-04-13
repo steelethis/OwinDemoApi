@@ -9,12 +9,10 @@ namespace DemoAPI.Model
 {
     public class PersonRepository : IPersonRepository
     {
-        private static Dictionary<int, Person> people = new Dictionary<int, Person>();
-        private static int index;
 
         private SQLiteConnection GetDbConnection()
         {
-            return new SQLiteConnection(@"Data Source=S:\dev\db\sqlite\peopleDB.db;Version=3;");
+            return new SQLiteConnection(@"Data Source=E:\db\sqlite\peopleDB.db;Version=3;");
         }
 
         private void ExecuteSQLCommand(string sqlStatement)
@@ -68,7 +66,28 @@ namespace DemoAPI.Model
 
         public IEnumerable<Person> GetAll()
         {
-            throw new NotImplementedException();
+
+            SQLiteConnection dbCon = GetDbConnection();
+            List<Person> people = new List<Person>();
+            string sql = $"select * from people";
+
+            using (dbCon)
+            {
+                dbCon.Open();
+                SQLiteCommand command = new SQLiteCommand(sql, dbCon);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    people.Add(new Person
+                    {
+                        Name = (string)reader["name"],
+                        Address = (string)reader["address"],
+                        Email = (string)reader["email"]
+                    });
+                }
+            }
+            return people;
         }
 
         public void Remove(string personId)

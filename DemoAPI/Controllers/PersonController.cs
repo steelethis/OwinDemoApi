@@ -42,7 +42,7 @@ namespace DemoAPI.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
-            List<Person> people = (List<Person>)personRepository.GetAll();
+            IEnumerable<Person> people = personRepository.GetAll();
             return Content(HttpStatusCode.OK, people);
         }
     }
